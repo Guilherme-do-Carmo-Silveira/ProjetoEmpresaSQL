@@ -113,6 +113,59 @@ WHERE nome = 'Maria' AND senha = '123Mudar'
 DELETE usuario_projeto
 WHERE ID_usuario = 2
 
+SELECT ID_usuario, nome, email, username, 
+		Passwrd = CASE senha 
+		WHEN '123Mudar' THEN 
+			senha 
+		ELSE 
+			'********' 
+		END
+FROM usuario
+
+GO
+
+SELECT nome, descricao, data_projeto,
+	   CONVERT(CHAR(10), DATEADD(DAY, 15, data_projeto), 103) AS Data_Final
+FROM projeto
+WHERE ID_projeto IN
+(
+	SELECT ID_projeto
+	FROM usuario_projeto
+	WHERE ID_usuario IN
+	(
+			SELECT ID_usuario
+			FROM usuario
+			WHERE email = 'aparecido@empresa.com'
+	)
+)
+
+GO
+
+SELECT nome, email
+FROM usuario
+WHERE ID_usuario IN
+(
+	SELECT ID_usuario
+	FROM usuario_projeto
+	WHERE ID_projeto IN
+	(	
+		SELECT ID_projeto
+		FROM projeto
+		WHERE nome = 'Auditoria'
+	)
+)
+
+GO
+
+SELECT nome, descricao, data_projeto, '2014-09-16' AS Data_Final,
+	   DATEDIFF(DAY, data_projeto, '2014-09-16') * 79.85 AS Custo_Total
+FROM projeto
+WHERE nome LIKE 'Manutenção%'
+	
+ 
+
 select * from projeto
 select * from usuario
 SELECT * FROM usuario_projeto
+
+
